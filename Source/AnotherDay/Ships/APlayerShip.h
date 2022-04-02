@@ -14,7 +14,7 @@ class ANOTHERDAY_API AAPlayerShip : public ACharacter
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Ship")
 	int Speed;
-	
+
 	// Sets default values for this character's properties
 	AAPlayerShip();
 
