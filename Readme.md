@@ -6,7 +6,7 @@
 
 Capital Ship Defense
 
-## Station Defense
+## Another Day in Space
 
 ```
 The invaders are attacking your space station - as they do.
