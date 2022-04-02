@@ -6,3 +6,4 @@ Binaries/
 Plugins/
 
 workspace.code-workspace
+*.blend[0-9]
