@@ -7,6 +7,21 @@
 #include "Components/ActorComponent.h"
 #include "Weapon.generated.h"
 
+USTRUCT(BlueprintType)
+struct FWeaponStatus
+{
+	GENERATED_BODY();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	bool CanFire;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	float RemainingTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	float TotalTime;
+};
+
 /**
  * 
  */
@@ -34,6 +49,8 @@ public:
 	UWeapon();
 
 protected:
+	float lastFired;
+	
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
@@ -45,4 +62,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Weapon")
 	void Fire(UMeshComponent* mesh);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category="Weapon")
+	FWeaponStatus GetStatus();
 };

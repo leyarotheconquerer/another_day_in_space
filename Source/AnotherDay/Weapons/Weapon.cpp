@@ -13,6 +13,7 @@ UWeapon::UWeapon()
 void UWeapon::BeginPlay()
 {
 	Super::BeginPlay();
+	lastFired = -100;
 }
 
 
@@ -22,22 +23,38 @@ void UWeapon::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
+
 void UWeapon::Fire(UMeshComponent* mesh)
 {
-	for (const FName name : Turrets)
+	if (GetStatus().CanFire)
 	{
-		const FVector location = mesh->GetSocketLocation(name);
-		const FRotator rotation(
-			0.f,
-			mesh->GetSocketRotation(name).Yaw + RotationOffset,
-			0.f
-		);
-		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(Type, location, rotation);
-		if (projectile)
+		lastFired = GetOwner()->GetGameTimeSinceCreation();
+		for (const FName name : Turrets)
 		{
-			projectile->SetTargets(Targets);
+			const FVector location = mesh->GetSocketLocation(name);
+			const FRotator rotation(
+				0.f,
+				mesh->GetSocketRotation(name).Yaw + RotationOffset,
+				0.f
+			);
+			AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(Type, location, rotation);
+			if (projectile)
+			{
+				projectile->SetTargets(Targets);
+			}
 		}
 	}
 }
+
+FWeaponStatus UWeapon::GetStatus()
+{
+	const float currentTime = GetOwner()->GetGameTimeSinceCreation();
+	return FWeaponStatus {
+		lastFired + FireDelay < currentTime,
+		FMath::Max(0.f, lastFired + FireDelay - currentTime),
+		FireDelay
+	};
+}
+
 
 

@@ -25,7 +25,6 @@ void AProjectile::Tick(float DeltaTime)
 	AddActorWorldOffset(forward, true);
 	if (GetGameTimeSinceCreation() > Lifetime)
 	{
-		UE_LOG(LogTemp, Display, TEXT("Test message"));
 		Expire();
 	}
 }
