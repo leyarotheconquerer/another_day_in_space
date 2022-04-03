@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "AnotherDayGameModeBase.h"
 #include "Health.generated.h"
 
 UENUM(BlueprintType)
@@ -34,9 +35,15 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Shield")
 	float ShieldTotal;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Shield")
+	float ShieldRegen;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Shield")
+	float ShieldRegenRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Damage")
-	TMap<TSubclassOf<UDamageType>, EDamageType> DamageTypes;
+	TMap<TSubclassOf<UDamageType>, FDamageFactor> DamageTypes;
 
 	UPROPERTY(BlueprintAssignable, Category="Health")
 	FHealthEvent Die;
@@ -45,6 +52,8 @@ public:
 	UHealth();
 
 protected:
+	float lastRegen;
+	
 	// Called when the game starts
 	virtual void BeginPlay() override;
 

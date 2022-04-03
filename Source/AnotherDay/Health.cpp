@@ -3,6 +3,9 @@
 
 #include "Health.h"
 
+#include "AnotherDayGameModeBase.h"
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values for this component's properties
 UHealth::UHealth()
@@ -10,8 +13,10 @@ UHealth::UHealth()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+	Shield = ShieldTotal = 100.f;
+	Armor = ArmorTotal = 100.f;
+	ShieldRegen = 10.f;
+	ShieldRegenRate = 1.f;
 }
 
 
@@ -19,9 +24,13 @@ UHealth::UHealth()
 void UHealth::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
+	AAnotherDayGameModeBase* mode = Cast<AAnotherDayGameModeBase>(UGameplayStatics::GetGameMode(GetWorld()));
+	lastRegen = GetOwner()->GetGameTimeSinceCreation();
+	if (mode != nullptr)
+	{
+		DamageTypes.Empty();
+		DamageTypes.Append(mode->DamageTypes);
+	}
 }
 
 
@@ -29,8 +38,12 @@ void UHealth::BeginPlay()
 void UHealth::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
+	float now = GetOwner()->GetGameTimeSinceCreation();
+	if (lastRegen + ShieldRegenRate < now)
+	{
+		Shield = FMath::Min(Shield + ShieldRegen, ShieldTotal);
+		lastRegen = now;
+	}
 }
 
 
@@ -39,32 +52,16 @@ void UHealth::TakeDamage(float damage, const UDamageType* type)
 	const TSubclassOf<UDamageType> typeClass = type->GetClass();
 	if (DamageTypes.Contains(typeClass))
 	{
-		EDamageType* damageType = DamageTypes.Find(typeClass);
-		float shieldFactor = 1.f;
-		float armorFactor = 1.f;
-		if (damageType)
+		const FDamageFactor* factor = DamageTypes.Find(typeClass);
+		if (factor != nullptr)
 		{
-			switch (*damageType)
+			const float remaining = FMath::Max(0.f, (damage * factor->ShieldFactor - Shield) / factor->ShieldFactor);
+			Shield = FMath::Max(0.f, Shield - damage * factor->ShieldFactor);
+			Armor = FMath::Max(0.f, Armor - remaining * factor->ShieldFactor);
+			if (Armor <= 0.001f)
 			{
-			case EDamageType::BEAM:
-				shieldFactor = 2.f;
-				armorFactor = 0.5f;
-				break;
-			case EDamageType::MISSILE:
-				shieldFactor = 0.5f;
-				armorFactor = 2.f;
-				break;
-			case EDamageType::NORMAL:
-			default:
-				break;
+				Die.Broadcast();
 			}
-		}
-		const float remaining = FMath::Max(0.f, (damage * shieldFactor - Shield) / shieldFactor);
-		Shield = FMath::Max(0.f, Shield - damage * shieldFactor);
-		Armor = FMath::Max(0.f, Armor - remaining * armorFactor);
-		if (Armor <= 0.001f)
-		{
-			Die.Broadcast();
 		}
 	}
 }
