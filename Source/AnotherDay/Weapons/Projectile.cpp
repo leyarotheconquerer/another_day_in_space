@@ -22,7 +22,7 @@ void AProjectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	const FVector forward = GetActorForwardVector() * DeltaTime * Speed;
-	AddActorLocalOffset(forward, true);
+	AddActorWorldOffset(forward, true);
 	if (GetGameTimeSinceCreation() > Lifetime)
 	{
 		UE_LOG(LogTemp, Display, TEXT("Test message"));

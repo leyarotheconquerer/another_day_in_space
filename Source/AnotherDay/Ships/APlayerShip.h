@@ -3,8 +3,25 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AnotherDay/Weapons/Weapon.h"
+#include "AnotherDay/Weapons/Projectile.h"
 #include "GameFramework/Character.h"
 #include "APlayerShip.generated.h"
+
+USTRUCT(BlueprintType)
+struct FShipWeapon
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	float RotationOffset;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	TArray<FName> Turrets;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	TSubclassOf<AProjectile> Type;
+};
 
 UCLASS()
 class ANOTHERDAY_API AAPlayerShip : public ACharacter
@@ -14,6 +31,15 @@ class ANOTHERDAY_API AAPlayerShip : public ACharacter
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Ship")
 	int Speed;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	FShipWeapon Weapon1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	FShipWeapon Weapon2;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	FShipWeapon Weapon3;
 
 	// Sets default values for this character's properties
 	AAPlayerShip();
