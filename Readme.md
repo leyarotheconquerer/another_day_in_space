@@ -116,3 +116,9 @@ Key Mechanics:
 ### Sunday Evening
 * Fill in missing menus
 * Testing
+
+## Attribution
+
+### Fonts
+
+https://www.fontspace.com/orbitron-font-f19177
