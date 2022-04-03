@@ -25,7 +25,7 @@ public:
 	TSubclassOf<UDamageType> Type;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Projectile")
-	TArray<UClass*> Targets;
+	TArray<TSubclassOf<AActor>> Targets;
 
 	// Sets default values for this actor's properties
 	AProjectile();
@@ -41,6 +41,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
+	void SetTargets(const TArray<TSubclassOf<AActor>> targets);
 
 	UFUNCTION(BlueprintImplementableEvent, Category="Projectile")
 	void Collide();

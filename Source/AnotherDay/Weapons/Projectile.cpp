@@ -30,6 +30,16 @@ void AProjectile::Tick(float DeltaTime)
 	}
 }
 
+void AProjectile::SetTargets(const TArray<TSubclassOf<AActor>> targets)
+{
+	Targets.Empty();
+	for (TSubclassOf<AActor> target : targets)
+	{
+		Targets.Add(target);
+	}
+}
+
+
 void AProjectile::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	const UClass* otherType = OtherActor->GetClass();

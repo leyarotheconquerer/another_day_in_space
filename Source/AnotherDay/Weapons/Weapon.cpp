@@ -26,14 +26,17 @@ void UWeapon::Fire(UMeshComponent* mesh)
 {
 	for (const FName name : Turrets)
 	{
-		UE_LOG(LogTemp, Display, TEXT("Firing %s"), *name.ToString());
 		const FVector location = mesh->GetSocketLocation(name);
 		const FRotator rotation(
 			0.f,
 			mesh->GetSocketRotation(name).Yaw + RotationOffset,
 			0.f
 		);
-		const AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(Type, location, rotation);
+		AProjectile* projectile = GetWorld()->SpawnActor<AProjectile>(Type, location, rotation);
+		if (projectile)
+		{
+			projectile->SetTargets(Targets);
+		}
 	}
 }
 

@@ -24,6 +24,12 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
 	TSubclassOf<AProjectile> Type;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	TArray<TSubclassOf<AActor>> Targets;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	float FireDelay;
 
 	UWeapon();
 

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AnotherDay/Weapons/Weapon.h"
 #include "GameFramework/Character.h"
 #include "EnemyShip.generated.h"
 
@@ -12,6 +13,9 @@ class ANOTHERDAY_API AEnemyShip : public ACharacter
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Weapon")
+	UWeapon* Weapon;
+	
 	// Sets default values for this character's properties
 	AEnemyShip();
 
@@ -25,4 +29,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Weapon")
+	void Attack(FVector target);
 };
