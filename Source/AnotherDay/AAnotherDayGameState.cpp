@@ -68,8 +68,8 @@ void AAAnotherDayGameState::StartWave()
 		{
 			AActor* spawn = spawns[FMath::RandHelper(spawns.Num())];
 			TSubclassOf<AEnemyShip> type = mode->EnemyTypes[FMath::RandHelper(mode->EnemyTypes.Num())];
-			FVector origin;
 			FVector extent;
+			FVector origin;
 			spawn->GetActorBounds(false, origin, extent);
 			FVector location = origin + FVector(
 				FMath::RandRange(0.f, extent.X),
@@ -77,7 +77,7 @@ void AAAnotherDayGameState::StartWave()
 				0.f
 			);
 			location.Z = 0;
-			AActor* actor = GetWorld()->SpawnActor<AEnemyShip>(type, location, FRotator{});
+			AActor* actor = GetWorld()->SpawnActor<AEnemyShip>(type, location, FRotator{0.f, 0.f, 0.f});
 			if (actor != nullptr)
 			{
 				enemies += 1;
